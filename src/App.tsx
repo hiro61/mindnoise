@@ -37,34 +37,38 @@ const MAX_SECONDS = 24 * 60 * 60;
 const WEEKDAYS_SHORT = ["日", "月", "火", "水", "木", "金", "土"];
 const WEEKDAYS_LONG = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
 const CIRCUIT_TRACES: CircuitTrace[] = [
-  { path: "M 530 500 L 620 500", startProgress: 0.02, endProgress: 0.12, node: { x: 620, y: 500 } },
-  { path: "M 470 500 L 380 500", startProgress: 0.04, endProgress: 0.15, node: { x: 380, y: 500 } },
-  { path: "M 500 470 L 500 378", startProgress: 0.07, endProgress: 0.19, node: { x: 500, y: 378, shape: "square" } },
-  { path: "M 500 530 L 500 620", startProgress: 0.1, endProgress: 0.22, node: { x: 500, y: 620 } },
-  { path: "M 620 500 L 690 500 L 690 420", startProgress: 0.2, endProgress: 0.34, node: { x: 690, y: 420 } },
-  { path: "M 620 500 L 710 500 L 750 540", startProgress: 0.24, endProgress: 0.38, node: { x: 750, y: 540, shape: "square" } },
-  { path: "M 380 500 L 310 500 L 310 430", startProgress: 0.28, endProgress: 0.42, node: { x: 310, y: 430 } },
-  { path: "M 380 500 L 292 500 L 252 540", startProgress: 0.32, endProgress: 0.46, node: { x: 252, y: 540, shape: "square" } },
-  { path: "M 500 378 L 500 305 L 560 305", startProgress: 0.36, endProgress: 0.5, node: { x: 560, y: 305 } },
-  { path: "M 500 378 L 452 330 L 452 270", startProgress: 0.4, endProgress: 0.54, node: { x: 452, y: 270, shape: "square" } },
-  { path: "M 500 620 L 500 700 L 570 700", startProgress: 0.44, endProgress: 0.58, node: { x: 570, y: 700 } },
-  { path: "M 500 620 L 450 670 L 450 742", startProgress: 0.48, endProgress: 0.62, node: { x: 450, y: 742, shape: "square" } },
-  { path: "M 690 420 L 770 420 L 805 385", startProgress: 0.56, endProgress: 0.68, node: { x: 805, y: 385 } },
-  { path: "M 750 540 L 825 540 L 825 610", startProgress: 0.6, endProgress: 0.72, node: { x: 825, y: 610, shape: "square" } },
-  { path: "M 310 430 L 232 430 L 198 394", startProgress: 0.62, endProgress: 0.74, node: { x: 198, y: 394 } },
-  { path: "M 252 540 L 178 540 L 178 612", startProgress: 0.64, endProgress: 0.76, node: { x: 178, y: 612, shape: "square" } },
-  { path: "M 560 305 L 628 305 L 662 270", startProgress: 0.68, endProgress: 0.8, node: { x: 662, y: 270 } },
-  { path: "M 452 270 L 382 270 L 348 234", startProgress: 0.7, endProgress: 0.82, node: { x: 348, y: 234 } },
-  { path: "M 570 700 L 648 700 L 690 742", startProgress: 0.72, endProgress: 0.84, node: { x: 690, y: 742, shape: "square" } },
-  { path: "M 450 742 L 376 742 L 340 778", startProgress: 0.74, endProgress: 0.86, node: { x: 340, y: 778 } },
-  { path: "M 805 385 L 858 385 L 890 353", startProgress: 0.8, endProgress: 0.92, node: { x: 890, y: 353, shape: "square" }, strokeWidth: 7 },
-  { path: "M 825 610 L 884 610 L 914 640", startProgress: 0.82, endProgress: 0.94, node: { x: 914, y: 640 }, strokeWidth: 7 },
-  { path: "M 198 394 L 142 394 L 108 360", startProgress: 0.84, endProgress: 0.96, node: { x: 108, y: 360, shape: "square" }, strokeWidth: 7 },
-  { path: "M 178 612 L 118 612 L 88 642", startProgress: 0.86, endProgress: 1, node: { x: 88, y: 642 }, strokeWidth: 7 },
-  { path: "M 662 270 L 710 270 L 710 220", startProgress: 0.88, endProgress: 1, node: { x: 710, y: 220 }, strokeWidth: 6 },
-  { path: "M 348 234 L 300 234 L 300 188", startProgress: 0.9, endProgress: 1, node: { x: 300, y: 188, shape: "square" }, strokeWidth: 6 },
-  { path: "M 690 742 L 742 742 L 742 792", startProgress: 0.92, endProgress: 1, node: { x: 742, y: 792 }, strokeWidth: 6 },
-  { path: "M 340 778 L 288 778 L 288 830", startProgress: 0.94, endProgress: 1, node: { x: 288, y: 830, shape: "square" }, strokeWidth: 6 },
+  { path: "M 530 500 L 612 500", startProgress: 0, endProgress: 0.11, node: { x: 612, y: 500 }, strokeWidth: 5 },
+  { path: "M 470 500 L 388 500", startProgress: 0.004, endProgress: 0.12, node: { x: 388, y: 500 }, strokeWidth: 5 },
+  { path: "M 500 470 L 500 388", startProgress: 0.008, endProgress: 0.15, node: { x: 500, y: 388, shape: "square" }, strokeWidth: 5 },
+  { path: "M 500 530 L 500 612", startProgress: 0.012, endProgress: 0.18, node: { x: 500, y: 612 }, strokeWidth: 5 },
+  { path: "M 612 500 L 684 500 L 684 438", startProgress: 0.17, endProgress: 0.29, node: { x: 684, y: 438 }, strokeWidth: 4 },
+  { path: "M 612 500 L 672 500 L 720 548", startProgress: 0.21, endProgress: 0.34, node: { x: 720, y: 548, shape: "square" }, strokeWidth: 4 },
+  { path: "M 388 500 L 316 500 L 316 442", startProgress: 0.24, endProgress: 0.37, node: { x: 316, y: 442 }, strokeWidth: 4 },
+  { path: "M 388 500 L 328 500 L 280 548", startProgress: 0.28, endProgress: 0.41, node: { x: 280, y: 548, shape: "square" }, strokeWidth: 4 },
+  { path: "M 500 388 L 500 326 L 560 326", startProgress: 0.33, endProgress: 0.46, node: { x: 560, y: 326 }, strokeWidth: 4 },
+  { path: "M 500 388 L 448 336 L 448 282", startProgress: 0.37, endProgress: 0.5, node: { x: 448, y: 282, shape: "square" }, strokeWidth: 4 },
+  { path: "M 500 612 L 500 674 L 560 674", startProgress: 0.41, endProgress: 0.54, node: { x: 560, y: 674 }, strokeWidth: 4 },
+  { path: "M 500 612 L 452 660 L 452 718", startProgress: 0.45, endProgress: 0.58, node: { x: 452, y: 718, shape: "square" }, strokeWidth: 4 },
+  { path: "M 684 438 L 756 438 L 792 402", startProgress: 0.52, endProgress: 0.64, node: { x: 792, y: 402 }, strokeWidth: 3 },
+  { path: "M 720 548 L 786 548 L 786 616", startProgress: 0.55, endProgress: 0.68, node: { x: 786, y: 616, shape: "square" }, strokeWidth: 3 },
+  { path: "M 316 442 L 244 442 L 208 406", startProgress: 0.58, endProgress: 0.71, node: { x: 208, y: 406 }, strokeWidth: 3 },
+  { path: "M 280 548 L 214 548 L 214 616", startProgress: 0.61, endProgress: 0.74, node: { x: 214, y: 616, shape: "square" }, strokeWidth: 3 },
+  { path: "M 560 326 L 628 326 L 664 290", startProgress: 0.65, endProgress: 0.78, node: { x: 664, y: 290 }, strokeWidth: 3 },
+  { path: "M 448 282 L 382 282 L 346 246", startProgress: 0.68, endProgress: 0.81, node: { x: 346, y: 246 }, strokeWidth: 3 },
+  { path: "M 560 674 L 632 674 L 676 718", startProgress: 0.71, endProgress: 0.84, node: { x: 676, y: 718, shape: "square" }, strokeWidth: 3 },
+  { path: "M 452 718 L 382 718 L 344 756", startProgress: 0.74, endProgress: 0.87, node: { x: 344, y: 756 }, strokeWidth: 3 },
+  { path: "M 792 402 L 834 402 L 866 370", startProgress: 0.79, endProgress: 0.91, node: { x: 866, y: 370, shape: "square" }, strokeWidth: 2.5 },
+  { path: "M 786 616 L 836 616 L 866 646", startProgress: 0.81, endProgress: 0.93, node: { x: 866, y: 646 }, strokeWidth: 2.5 },
+  { path: "M 208 406 L 166 406 L 134 374", startProgress: 0.83, endProgress: 0.95, node: { x: 134, y: 374, shape: "square" }, strokeWidth: 2.5 },
+  { path: "M 214 616 L 164 616 L 134 646", startProgress: 0.85, endProgress: 0.97, node: { x: 134, y: 646 }, strokeWidth: 2.5 },
+  { path: "M 664 290 L 704 290 L 704 248", startProgress: 0.87, endProgress: 0.98, node: { x: 704, y: 248 }, strokeWidth: 2.5 },
+  { path: "M 346 246 L 306 246 L 306 204", startProgress: 0.89, endProgress: 1, node: { x: 306, y: 204, shape: "square" }, strokeWidth: 2.5 },
+  { path: "M 676 718 L 720 718 L 720 764", startProgress: 0.91, endProgress: 1, node: { x: 720, y: 764 }, strokeWidth: 2.5 },
+  { path: "M 344 756 L 300 756 L 300 804", startProgress: 0.93, endProgress: 1, node: { x: 300, y: 804, shape: "square" }, strokeWidth: 2.5 },
+  { path: "M 684 500 L 742 472 L 790 472", startProgress: 0.78, endProgress: 0.96, node: { x: 790, y: 472 }, strokeWidth: 2 },
+  { path: "M 316 500 L 258 472 L 210 472", startProgress: 0.8, endProgress: 0.98, node: { x: 210, y: 472 }, strokeWidth: 2 },
+  { path: "M 500 326 L 532 282 L 532 236", startProgress: 0.82, endProgress: 1, node: { x: 532, y: 236, shape: "square" }, strokeWidth: 2 },
+  { path: "M 500 674 L 468 718 L 468 764", startProgress: 0.84, endProgress: 1, node: { x: 468, y: 764 }, strokeWidth: 2 },
 ];
 
 function pad(value: number) {
@@ -216,16 +220,12 @@ function getDaySummary(sessions: MeditationSession[]) {
 function CircuitProgress({
   progress,
   phase,
-  label,
-  time,
   hint,
   rippleKey,
   onClick,
 }: {
   progress: number;
   phase: TimerPhase;
-  label: string;
-  time: string;
   hint: string;
   rippleKey: number;
   onClick: () => void;
@@ -240,7 +240,14 @@ function CircuitProgress({
       aria-label="瞑想中に雑念が出たらクリック"
     >
       <svg className="circuit-progress" viewBox="0 0 1000 1000" aria-hidden="true">
-        <g className="circuit-traces">
+        <defs>
+          <clipPath id="circuit-clip">
+            <circle cx="500" cy="500" r="398" />
+          </clipPath>
+        </defs>
+        <circle className="circuit-field" cx="500" cy="500" r="398" />
+        <circle className="circuit-inner-ring" cx="500" cy="500" r="326" />
+        <g className="circuit-traces" clipPath="url(#circuit-clip)">
           {CIRCUIT_TRACES.map((trace, index) => {
             const localProgress = clamp01(
               (normalizedProgress - trace.startProgress) /
@@ -285,14 +292,11 @@ function CircuitProgress({
             );
           })}
         </g>
+        <circle className="circuit-rim" cx="500" cy="500" r="398" />
         <rect className="circuit-core" height="60" width="60" x="470" y="470" />
       </svg>
       {rippleKey > 0 ? <span className="ripple" key={rippleKey} /> : null}
-      <span className="timer-content">
-        <span className="timer-label">{label}</span>
-        <strong>{time}</strong>
-        <small>{hint}</small>
-      </span>
+      <span className="circuit-action-hint">{hint}</span>
     </button>
   );
 }
@@ -512,14 +516,18 @@ function App() {
 
         {view === "timer" ? (
           <section className="timer-view" aria-label="瞑想タイマー">
+            <div className="time-readout" aria-live="polite">
+              <span>{mode === "countdown" ? "残り時間" : "経過時間"}</span>
+              <strong>{formatTime(displaySeconds)}</strong>
+              <small>{phase === "running" ? "進行中" : phase === "paused" ? "一時停止中" : "待機中"}</small>
+            </div>
+
             <CircuitProgress
               hint={phase === "running" ? "クリックで雑念を記録" : "静かに始めます"}
-              label={mode === "countdown" ? "残り時間" : "経過時間"}
               onClick={recordDistraction}
               phase={phase}
               progress={progress}
               rippleKey={rippleKey}
-              time={formatTime(displaySeconds)}
             />
 
             <div className="noise-counter" aria-live="polite">
