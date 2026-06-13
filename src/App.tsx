@@ -44,6 +44,19 @@ function formatTime(totalSeconds: number) {
   return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
 }
 
+function formatElapsedMarker(totalSeconds: number) {
+  const seconds = Math.max(0, Math.floor(totalSeconds));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
+  if (hours > 0) {
+    return `${hours}時間${pad(minutes)}分${pad(remainingSeconds)}秒`;
+  }
+
+  return `${minutes}分${pad(remainingSeconds)}秒`;
+}
+
 function formatDuration(totalSeconds: number) {
   const seconds = Math.max(0, Math.floor(totalSeconds));
   const hours = Math.floor(seconds / 3600);
@@ -193,6 +206,7 @@ function App() {
     mode === "countdown" ? Math.max(0, durationSeconds - effectiveElapsed) : effectiveElapsed;
   const progress = durationSeconds > 0 ? effectiveElapsed / durationSeconds : 0;
   const waterLevel = mode === "countdown" ? 1 - progress : progress;
+  const latestDistraction = distractions.at(-1);
 
   useEffect(() => {
     persistSessions(sessions);
@@ -395,6 +409,17 @@ function App() {
               <strong>{distractions.length}</strong>
             </div>
 
+            <div className="live-noise-log" aria-live="polite">
+              {latestDistraction ? (
+                <>
+                  <span>直近</span>
+                  <strong>{formatElapsedMarker(latestDistraction.atSecond)}</strong>
+                </>
+              ) : (
+                <span>発生時刻はここに記録されます</span>
+              )}
+            </div>
+
             <section className="control-card" aria-label="タイマー設定">
               <div className="mode-switch">
                 <button
@@ -546,9 +571,17 @@ function App() {
                       </div>
                     </dl>
                     {session.distractions.length > 0 ? (
-                      <p className="noise-log">
-                        {session.distractions.map((distraction) => formatTime(distraction.atSecond)).join(" / ")}
-                      </p>
+                      <div className="noise-log">
+                        <span>雑念の発生時刻</span>
+                        <ul>
+                          {session.distractions.map((distraction, index) => (
+                            <li key={`${session.id}-${index}-${distraction.atSecond}`}>
+                              <strong>{index + 1}回目</strong>
+                              <time>{formatElapsedMarker(distraction.atSecond)}</time>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ) : null}
                   </article>
                 ))
