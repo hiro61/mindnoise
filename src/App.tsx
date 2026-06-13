@@ -8,6 +8,18 @@ type Distraction = {
   atSecond: number;
 };
 
+type CircuitTrace = {
+  path: string;
+  startProgress: number;
+  endProgress: number;
+  node?: {
+    x: number;
+    y: number;
+    shape?: "circle" | "square";
+  };
+  strokeWidth?: number;
+};
+
 export type MeditationSession = {
   id: string;
   date: string;
@@ -24,6 +36,36 @@ const STORAGE_KEY = "mindnoise.sessions.v1";
 const MAX_SECONDS = 24 * 60 * 60;
 const WEEKDAYS_SHORT = ["日", "月", "火", "水", "木", "金", "土"];
 const WEEKDAYS_LONG = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+const CIRCUIT_TRACES: CircuitTrace[] = [
+  { path: "M 530 500 L 620 500", startProgress: 0.02, endProgress: 0.12, node: { x: 620, y: 500 } },
+  { path: "M 470 500 L 380 500", startProgress: 0.04, endProgress: 0.15, node: { x: 380, y: 500 } },
+  { path: "M 500 470 L 500 378", startProgress: 0.07, endProgress: 0.19, node: { x: 500, y: 378, shape: "square" } },
+  { path: "M 500 530 L 500 620", startProgress: 0.1, endProgress: 0.22, node: { x: 500, y: 620 } },
+  { path: "M 620 500 L 690 500 L 690 420", startProgress: 0.2, endProgress: 0.34, node: { x: 690, y: 420 } },
+  { path: "M 620 500 L 710 500 L 750 540", startProgress: 0.24, endProgress: 0.38, node: { x: 750, y: 540, shape: "square" } },
+  { path: "M 380 500 L 310 500 L 310 430", startProgress: 0.28, endProgress: 0.42, node: { x: 310, y: 430 } },
+  { path: "M 380 500 L 292 500 L 252 540", startProgress: 0.32, endProgress: 0.46, node: { x: 252, y: 540, shape: "square" } },
+  { path: "M 500 378 L 500 305 L 560 305", startProgress: 0.36, endProgress: 0.5, node: { x: 560, y: 305 } },
+  { path: "M 500 378 L 452 330 L 452 270", startProgress: 0.4, endProgress: 0.54, node: { x: 452, y: 270, shape: "square" } },
+  { path: "M 500 620 L 500 700 L 570 700", startProgress: 0.44, endProgress: 0.58, node: { x: 570, y: 700 } },
+  { path: "M 500 620 L 450 670 L 450 742", startProgress: 0.48, endProgress: 0.62, node: { x: 450, y: 742, shape: "square" } },
+  { path: "M 690 420 L 770 420 L 805 385", startProgress: 0.56, endProgress: 0.68, node: { x: 805, y: 385 } },
+  { path: "M 750 540 L 825 540 L 825 610", startProgress: 0.6, endProgress: 0.72, node: { x: 825, y: 610, shape: "square" } },
+  { path: "M 310 430 L 232 430 L 198 394", startProgress: 0.62, endProgress: 0.74, node: { x: 198, y: 394 } },
+  { path: "M 252 540 L 178 540 L 178 612", startProgress: 0.64, endProgress: 0.76, node: { x: 178, y: 612, shape: "square" } },
+  { path: "M 560 305 L 628 305 L 662 270", startProgress: 0.68, endProgress: 0.8, node: { x: 662, y: 270 } },
+  { path: "M 452 270 L 382 270 L 348 234", startProgress: 0.7, endProgress: 0.82, node: { x: 348, y: 234 } },
+  { path: "M 570 700 L 648 700 L 690 742", startProgress: 0.72, endProgress: 0.84, node: { x: 690, y: 742, shape: "square" } },
+  { path: "M 450 742 L 376 742 L 340 778", startProgress: 0.74, endProgress: 0.86, node: { x: 340, y: 778 } },
+  { path: "M 805 385 L 858 385 L 890 353", startProgress: 0.8, endProgress: 0.92, node: { x: 890, y: 353, shape: "square" }, strokeWidth: 7 },
+  { path: "M 825 610 L 884 610 L 914 640", startProgress: 0.82, endProgress: 0.94, node: { x: 914, y: 640 }, strokeWidth: 7 },
+  { path: "M 198 394 L 142 394 L 108 360", startProgress: 0.84, endProgress: 0.96, node: { x: 108, y: 360, shape: "square" }, strokeWidth: 7 },
+  { path: "M 178 612 L 118 612 L 88 642", startProgress: 0.86, endProgress: 1, node: { x: 88, y: 642 }, strokeWidth: 7 },
+  { path: "M 662 270 L 710 270 L 710 220", startProgress: 0.88, endProgress: 1, node: { x: 710, y: 220 }, strokeWidth: 6 },
+  { path: "M 348 234 L 300 234 L 300 188", startProgress: 0.9, endProgress: 1, node: { x: 300, y: 188, shape: "square" }, strokeWidth: 6 },
+  { path: "M 690 742 L 742 742 L 742 792", startProgress: 0.92, endProgress: 1, node: { x: 742, y: 792 }, strokeWidth: 6 },
+  { path: "M 340 778 L 288 778 L 288 830", startProgress: 0.94, endProgress: 1, node: { x: 288, y: 830, shape: "square" }, strokeWidth: 6 },
+];
 
 function pad(value: number) {
   return String(value).padStart(2, "0");
@@ -34,6 +76,10 @@ function clampDuration(seconds: number) {
     return 60;
   }
   return Math.min(MAX_SECONDS, Math.max(60, Math.floor(seconds)));
+}
+
+function clamp01(value: number) {
+  return Math.min(1, Math.max(0, value));
 }
 
 function formatTime(totalSeconds: number) {
@@ -167,6 +213,90 @@ function getDaySummary(sessions: MeditationSession[]) {
   );
 }
 
+function CircuitProgress({
+  progress,
+  phase,
+  label,
+  time,
+  hint,
+  rippleKey,
+  onClick,
+}: {
+  progress: number;
+  phase: TimerPhase;
+  label: string;
+  time: string;
+  hint: string;
+  rippleKey: number;
+  onClick: () => void;
+}) {
+  const normalizedProgress = clamp01(progress);
+
+  return (
+    <button
+      className={`circuit-timer ${phase === "running" ? "is-running" : ""}`}
+      type="button"
+      onClick={onClick}
+      aria-label="瞑想中に雑念が出たらクリック"
+    >
+      <svg className="circuit-progress" viewBox="0 0 1000 1000" aria-hidden="true">
+        <g className="circuit-traces">
+          {CIRCUIT_TRACES.map((trace, index) => {
+            const localProgress = clamp01(
+              (normalizedProgress - trace.startProgress) /
+                (trace.endProgress - trace.startProgress),
+            );
+            const nodeOpacity = clamp01((localProgress - 0.86) / 0.14);
+
+            return (
+              <g key={`${trace.path}-${index}`}>
+                <path
+                  className="circuit-line"
+                  d={trace.path}
+                  pathLength={1}
+                  style={{
+                    opacity: localProgress > 0 ? 1 : 0,
+                    strokeDasharray: 1,
+                    strokeDashoffset: 1 - localProgress,
+                    strokeWidth: trace.strokeWidth ?? 8,
+                  }}
+                />
+                {trace.node ? (
+                  trace.node.shape === "square" ? (
+                    <rect
+                      className="circuit-node circuit-node-square"
+                      height="18"
+                      style={{ opacity: nodeOpacity }}
+                      width="18"
+                      x={trace.node.x - 9}
+                      y={trace.node.y - 9}
+                    />
+                  ) : (
+                    <circle
+                      className="circuit-node"
+                      cx={trace.node.x}
+                      cy={trace.node.y}
+                      r="9"
+                      style={{ opacity: nodeOpacity }}
+                    />
+                  )
+                ) : null}
+              </g>
+            );
+          })}
+        </g>
+        <rect className="circuit-core" height="60" width="60" x="470" y="470" />
+      </svg>
+      {rippleKey > 0 ? <span className="ripple" key={rippleKey} /> : null}
+      <span className="timer-content">
+        <span className="timer-label">{label}</span>
+        <strong>{time}</strong>
+        <small>{hint}</small>
+      </span>
+    </button>
+  );
+}
+
 function App() {
   const today = useMemo(() => new Date(), []);
   const [view, setView] = useState<View>("timer");
@@ -205,7 +335,6 @@ function App() {
   const displaySeconds =
     mode === "countdown" ? Math.max(0, durationSeconds - effectiveElapsed) : effectiveElapsed;
   const progress = durationSeconds > 0 ? effectiveElapsed / durationSeconds : 0;
-  const waterLevel = mode === "countdown" ? 1 - progress : progress;
   const latestDistraction = distractions.at(-1);
 
   useEffect(() => {
@@ -383,26 +512,15 @@ function App() {
 
         {view === "timer" ? (
           <section className="timer-view" aria-label="瞑想タイマー">
-            <button
-              className={`water-timer ${phase === "running" ? "is-running" : ""}`}
-              type="button"
+            <CircuitProgress
+              hint={phase === "running" ? "クリックで雑念を記録" : "静かに始めます"}
+              label={mode === "countdown" ? "残り時間" : "経過時間"}
               onClick={recordDistraction}
-              aria-label="瞑想中に雑念が出たらクリック"
-            >
-              <span
-                className="water-fill"
-                style={{ transform: `translateY(${(1 - waterLevel) * 100}%)` }}
-              />
-              <span className="water-shine" />
-              {rippleKey > 0 ? <span className="ripple" key={rippleKey} /> : null}
-              <span className="timer-content">
-                <span className="timer-label">
-                  {mode === "countdown" ? "残り時間" : "経過時間"}
-                </span>
-                <strong>{formatTime(displaySeconds)}</strong>
-                <small>{phase === "running" ? "クリックで雑念を記録" : "静かに始めます"}</small>
-              </span>
-            </button>
+              phase={phase}
+              progress={progress}
+              rippleKey={rippleKey}
+              time={formatTime(displaySeconds)}
+            />
 
             <div className="noise-counter" aria-live="polite">
               <span>雑念</span>
