@@ -2,6 +2,12 @@
 
 Mindnoise is a local-first mindfulness timer for tracking meditation time and the number of distractions that appear during a session.
 
+Public URL:
+
+```text
+https://hiro61.github.io/mindnoise/
+```
+
 ## Features
 
 - Countdown and count-up meditation timer
